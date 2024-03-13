@@ -33,7 +33,6 @@ namespace SimpleInventoryManagementSystem
             Console.WriteLine("********************");
             Console.WriteLine("1: Inventory management");
             Console.WriteLine("2: Search Panel ");
-            Console.WriteLine("3: Save all data");
             Console.WriteLine("0: Close application");
             Console.WriteLine("Your selection: ");
             string userSelection = Console.ReadLine();
@@ -43,11 +42,9 @@ namespace SimpleInventoryManagementSystem
                     ShowInventoryManagementMenu();
                     break;
                 case "2":
-                    
+                    SearchForProduct();
                     break;
-                case "3":
-                    
-                    break;
+               
                 case "0":
                     break;
                 default:
@@ -56,6 +53,23 @@ namespace SimpleInventoryManagementSystem
 
 
             }
+
+        }
+
+        private static void SearchForProduct()
+        {
+            Console.WriteLine("Search by ID");
+            int input = int.Parse(Console.ReadLine());
+            Console.ForegroundColor= ConsoleColor.Cyan;
+            Console.WriteLine("Search Results:");
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine(((Product)(inventory.Find(p => p.ProductId == input))).ToString());
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("Press any key to return to main menu");
+            Console.ResetColor();
+
+            Console.ReadLine();
+            ViewMenu();
 
         }
 
