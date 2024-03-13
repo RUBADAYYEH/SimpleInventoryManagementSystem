@@ -88,10 +88,32 @@ namespace SimpleInventoryManagementSystem
                 case "2":
                     EditProduct();
                     break;
-                case "3":break;
-                case "0":break;
+                case "3":
+                    DeleteProduct();
+                    break;
+                case "0":
+                    ViewMenu();
+                    break;
+                 default:
+                    Console.WriteLine("Unvalid input");
+                    break;
+
 
             }
+        }
+
+        private static void DeleteProduct()
+        {
+            Console.WriteLine("Enter the id of the product you want to edit: ");
+            int input = int.Parse(Console.ReadLine());
+            inventory.Remove(inventory.Find(p=>p.ProductId==input));
+            Console.WriteLine($"product with ID {input} has been deleted from the inventory");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("Press any key to return to main menu");
+            Console.ResetColor();
+
+            Console.ReadLine();
+            ViewMenu();
         }
 
         private static void EditProduct()
