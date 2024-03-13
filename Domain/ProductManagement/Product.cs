@@ -9,9 +9,9 @@ namespace SimpleInventoryManagementSystem.Domain.ProductManagement
     public class Product
     {
         public int ProductId { get; set; }
-        protected string ProductName { get; set; }= string.Empty;
-        protected int Quantity { get; set; }
-        protected double Price { get; set; }
+        public string ProductName { get; set; }= string.Empty;
+        public int Quantity { get; set; }
+        public double Price { get; set; }
 
         public Product() { }
         public Product(int productId, string productName, int quantity, double price)

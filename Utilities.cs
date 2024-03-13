@@ -36,7 +36,7 @@ namespace SimpleInventoryManagementSystem
             Console.WriteLine("3: Save all data");
             Console.WriteLine("0: Close application");
             Console.WriteLine("Your selection: ");
-            string? userSelection = Console.ReadLine();
+            string userSelection = Console.ReadLine();
             switch (userSelection)
             {
                 case "1":
@@ -85,11 +85,71 @@ namespace SimpleInventoryManagementSystem
                     AddProduct();
                     
                     break;
-                case "2":break;
+                case "2":
+                    EditProduct();
+                    break;
                 case "3":break;
                 case "0":break;
 
             }
+        }
+
+        private static void EditProduct()
+        {
+            Console.WriteLine("Enter the id of the product you want to edit: ");
+            int input = int.Parse(Console.ReadLine());
+            Product  product = inventory.Where(p => p.ProductId ==input).FirstOrDefault();
+            
+            if (product!=null)
+            {
+                Console.WriteLine("********************");
+                Console.WriteLine("Select the data you want to edit: ");
+                Console.WriteLine("********************");
+                Console.WriteLine("1: Modify Quantity");
+                Console.WriteLine("2: Modify Price ");
+                Console.WriteLine("Your selection: ");
+                string userAction = Console.ReadLine();
+                switch (userAction)
+                {
+                    case "1":
+                        Console.WriteLine("modify the edited quantity: ");
+                        string quantity = Console.ReadLine();
+                        ModifyQuantity(product,int.Parse(quantity));
+
+                        break;
+                    case "2":
+                        Console.WriteLine("modify the edited price: ");
+                        string price = Console.ReadLine();
+                       ModifyPrice(product, double.Parse(price));
+                        break;
+                }
+                }
+        }
+
+        private static void ModifyPrice(Product product, double v)
+        {
+            inventory.Find(p => p.ProductId == product.ProductId).Price=v;
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine($"{inventory.Where(p => p.ProductId == product.ProductId).FirstOrDefault().ProductName} ; {inventory.Where(p => p.ProductId == product.ProductId).FirstOrDefault().Price} modified successfully to the inventory");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("Press any key to return to main menu");
+            Console.ResetColor();
+
+            Console.ReadLine();
+            ViewMenu();
+        }
+
+        private static void ModifyQuantity(Product product,int newQuantity)
+        {
+            inventory.Find(p => p.ProductId == product.ProductId). Quantity = newQuantity;
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine($"{inventory.Where(p => p.ProductId == product.ProductId).FirstOrDefault().ProductName} ; {inventory.Where(p => p.ProductId == product.ProductId).FirstOrDefault().Quantity} modified successfully to the inventory");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("Press any key to return to main menu");
+            Console.ResetColor();
+
+            Console.ReadLine();
+            ViewMenu();
         }
 
         private static void AddProduct()
@@ -98,7 +158,7 @@ namespace SimpleInventoryManagementSystem
             bool success = int.TryParse(Console.ReadLine(), out int productId);
             if (!success)
             {
-                productId = inventory.Where(id=>productId.);
+                productId = inventory.Max(p => p.ProductId)+1;
             }
             Console.WriteLine("Enter the name of the new product: ");
             string productName = Console.ReadLine();
