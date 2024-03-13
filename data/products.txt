@@ -1,0 +1,10 @@
+﻿1;Blue Desk;15;349.99
+2;Green Chair;25;129.95
+3;Red Lamp;10;79.99
+4;Black Table;20;199.50
+5;White Bookcase;30;449.75
+6;Orange Sofa;5;799.99
+7;Purple Bed;8;599.00
+8;Yellow Cabinet;12;299.99
+9;Black Desk;18;179.95
+10;Green Lamp;22;89.50
