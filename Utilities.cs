@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SimpleInventoryManagementSystem
 {
@@ -20,22 +18,22 @@ namespace SimpleInventoryManagementSystem
             Console.WriteLine("Press Any Key To Continue!");
             Console.ResetColor();
             Console.ReadLine();
-            
-           
+
+
 
         }
-        internal static void  ViewMenu()
+        internal static void ViewMenu()
         {
             Console.ResetColor();
             Console.Clear();
-            Console.WriteLine("********************");
+            DrawMargins();
             Console.WriteLine("* Select an Action *");
-            Console.WriteLine("********************");
+            DrawMargins();
             Console.WriteLine("1: Inventory management");
             Console.WriteLine("2: Search Panel ");
             Console.WriteLine("0: Close application");
             Console.WriteLine("Your selection: ");
-            string userSelection = Console.ReadLine();
+            string? userSelection = Console.ReadLine();
             switch (userSelection)
             {
                 case "1":
@@ -44,7 +42,7 @@ namespace SimpleInventoryManagementSystem
                 case "2":
                     SearchForProduct();
                     break;
-               
+
                 case "0":
                     break;
                 default:
@@ -59,11 +57,11 @@ namespace SimpleInventoryManagementSystem
         private static void SearchForProduct()
         {
             Console.WriteLine("Search by ID");
-            int input = int.Parse(Console.ReadLine());
-            Console.ForegroundColor= ConsoleColor.Cyan;
+            int input = int.Parse(Console.ReadLine()??"0");
+            Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("Search Results:");
             Console.ForegroundColor = ConsoleColor.Magenta;
-            Console.WriteLine(((Product)(inventory.Find(p => p.ProductId == input))).ToString());
+            Console.WriteLine(inventory.Find(p => p.ProductId == input));
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("Press any key to return to main menu");
             Console.ResetColor();
@@ -76,28 +74,28 @@ namespace SimpleInventoryManagementSystem
         private static void ShowInventoryManagementMenu()
         {
             Console.Clear();
-             Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("Curret products in inventory: ");
-            Console.ForegroundColor= ConsoleColor.Magenta;
-            foreach(Product product in inventory)
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            foreach (Product product in inventory)
             {
                 Console.WriteLine(product.ToString());
             }
-            Console.ResetColor ();
-            Console.WriteLine("********************");
+            Console.ResetColor();
+            DrawMargins();
             Console.WriteLine("* Select an Action *");
-            Console.WriteLine("********************");
+            DrawMargins();
             Console.WriteLine("1: Add new Product");
             Console.WriteLine("2: Edit Product ");
             Console.WriteLine("3: Delete Product");
             Console.WriteLine("0: Return to main menu");
             Console.WriteLine("Your selection: ");
-            string userAction=Console.ReadLine();
+            string? userAction = Console.ReadLine();
             switch (userAction)
             {
                 case "1":
                     AddProduct();
-                    
+
                     break;
                 case "2":
                     EditProduct();
@@ -108,8 +106,8 @@ namespace SimpleInventoryManagementSystem
                 case "0":
                     ViewMenu();
                     break;
-                 default:
-                    Console.WriteLine("Unvalid input");
+                default:
+                    Console.WriteLine("Invalid input");
                     break;
 
 
@@ -119,9 +117,18 @@ namespace SimpleInventoryManagementSystem
         private static void DeleteProduct()
         {
             Console.WriteLine("Enter the id of the product you want to edit: ");
-            int input = int.Parse(Console.ReadLine());
-            inventory.Remove(inventory.Find(p=>p.ProductId==input));
-            Console.WriteLine($"product with ID {input} has been deleted from the inventory");
+            int? input = int.Parse(Console.ReadLine()??"0");
+            Product? product = inventory.Find(p => p.ProductId == input);
+            if (product != null)
+            {
+                inventory.Remove(product);
+                Console.WriteLine($"product with ID {input} has been deleted from the inventory");
+            }
+            else
+            {
+                Console.WriteLine($"product with ID {input} does not exist in the inventory");
+            }
+         
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("Press any key to return to main menu");
             Console.ResetColor();
@@ -133,40 +140,40 @@ namespace SimpleInventoryManagementSystem
         private static void EditProduct()
         {
             Console.WriteLine("Enter the id of the product you want to edit: ");
-            int input = int.Parse(Console.ReadLine());
-            Product  product = inventory.Where(p => p.ProductId ==input).FirstOrDefault();
-            
-            if (product!=null)
+            int? input = int.Parse(Console.ReadLine() ?? "0");
+            Product? product = inventory.Where(p => p.ProductId == input).FirstOrDefault();
+
+            if (product != null)
             {
-                Console.WriteLine("********************");
+                DrawMargins();
                 Console.WriteLine("Select the data you want to edit: ");
-                Console.WriteLine("********************");
+                DrawMargins();
                 Console.WriteLine("1: Modify Quantity");
                 Console.WriteLine("2: Modify Price ");
                 Console.WriteLine("Your selection: ");
-                string userAction = Console.ReadLine();
+                string? userAction = Console.ReadLine();
                 switch (userAction)
                 {
                     case "1":
                         Console.WriteLine("modify the edited quantity: ");
-                        string quantity = Console.ReadLine();
-                        ModifyQuantity(product,int.Parse(quantity));
+                        string? quantity = Console.ReadLine();
+                        product.Quantity = int.Parse(quantity ?? "0");
+                        Console.WriteLine($"{product.ProductName} ; {product.Quantity} modified successfully to the inventory");
+
 
                         break;
                     case "2":
                         Console.WriteLine("modify the edited price: ");
-                        string price = Console.ReadLine();
-                       ModifyPrice(product, double.Parse(price));
+                        string? price = Console.ReadLine();
+                        product.Price= double.Parse(price ?? "0.0");
+                        Console.WriteLine($"{product.ProductName} ; {product.Price} modified successfully to the inventory");
                         break;
                 }
-                }
-        }
-
-        private static void ModifyPrice(Product product, double v)
-        {
-            inventory.Find(p => p.ProductId == product.ProductId).Price=v;
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine($"{inventory.Where(p => p.ProductId == product.ProductId).FirstOrDefault().ProductName} ; {inventory.Where(p => p.ProductId == product.ProductId).FirstOrDefault().Price} modified successfully to the inventory");
+            }
+            else
+            {
+                Console.WriteLine("Invalid ID : Product does not exist in the inventory.");
+            }
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("Press any key to return to main menu");
             Console.ResetColor();
@@ -175,18 +182,7 @@ namespace SimpleInventoryManagementSystem
             ViewMenu();
         }
 
-        private static void ModifyQuantity(Product product,int newQuantity)
-        {
-            inventory.Find(p => p.ProductId == product.ProductId). Quantity = newQuantity;
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine($"{inventory.Where(p => p.ProductId == product.ProductId).FirstOrDefault().ProductName} ; {inventory.Where(p => p.ProductId == product.ProductId).FirstOrDefault().Quantity} modified successfully to the inventory");
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("Press any key to return to main menu");
-            Console.ResetColor();
-
-            Console.ReadLine();
-            ViewMenu();
-        }
+     
 
         private static void AddProduct()
         {
@@ -194,23 +190,23 @@ namespace SimpleInventoryManagementSystem
             bool success = int.TryParse(Console.ReadLine(), out int productId);
             if (!success)
             {
-                productId = inventory.Max(p => p.ProductId)+1;
+                productId = inventory.Max(p => p.ProductId) + 1;
             }
             Console.WriteLine("Enter the name of the new product: ");
-            string productName = Console.ReadLine();
+            string? productName = Console.ReadLine();
             Console.WriteLine("Enter the quantity of the new product: ");
-             success = int.TryParse(Console.ReadLine(), out int quantity);
+            success = int.TryParse(Console.ReadLine(), out int quantity);
             if (!success)
             {
                 quantity = 0;
             }
             Console.WriteLine("Enter the price of the new product: ");
-             success = double.TryParse(Console.ReadLine(), out double price);
+            success = double.TryParse(Console.ReadLine(), out double price);
             if (!success)
             {
                 price = 0.0;
             }
-            Product product = new Product(productId, productName, quantity, price);
+            Product product = new Product {ProductId= productId, ProductName=productName,Quantity= quantity,Price= price };
             inventory.Add(product);
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine($"{productName} ; {productId} added successfully to the inventory");
@@ -221,6 +217,10 @@ namespace SimpleInventoryManagementSystem
             Console.ReadLine();
             ViewMenu();
 
+        }
+        public static void DrawMargins()
+        {
+            Console.WriteLine("********************");
         }
     }
 }

@@ -1,29 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SimpleInventoryManagementSystem.Domain.ProductManagement
+﻿namespace SimpleInventoryManagementSystem.Domain.ProductManagement
 {
     public class Product
     {
-        public int ProductId { get; set; }
-        public string ProductName { get; set; }= string.Empty;
-        public int Quantity { get; set; }
+        public int ProductId { get; init; }
+        public string? ProductName { get; set; }
+        public int? Quantity { get; set; }
         public double Price { get; set; }
 
-        public Product() { }
-        public Product(int productId, string productName, int quantity, double price)
-        {
-            ProductId = productId;
-            ProductName = productName;
-            Quantity = quantity;
-            Price = price;
-        }
+        public string Description {  get; set; } = string.Empty;
+
         public override string ToString()
         {
-            return $"{ProductId};{ProductName};{Quantity};{Price};";
+            if(Quantity == default) return string.Empty;
+
+            return $"{ProductId};{ProductName};{Quantity};{Price};"+ " ";  
+            
         }
     }
 }

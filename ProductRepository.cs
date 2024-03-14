@@ -2,9 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SimpleInventoryManagementSystem
 {
@@ -16,7 +13,7 @@ namespace SimpleInventoryManagementSystem
         
         public List<Product> LoadProductsFromFile()
         {
-            List<Product> products=new List<Product>();
+            List<Product> products=[];
             string path = $"{directory}{productsFileName}";
             try
             {
@@ -43,7 +40,12 @@ namespace SimpleInventoryManagementSystem
                         {
                             price = 0.0;
                         }
-                        Product newProduct = new Product(productId, productName, quantity, price);
+                        Product newProduct = new Product{
+                            ProductId = productId,
+                            ProductName= productName,
+                            Quantity = quantity,
+                            Price =  price 
+                        };
                         products.Add(newProduct);
 
                     }
